@@ -43,6 +43,7 @@ Documentation
   - Molpro
   - ORCA
   - MolCAS (?)
+- How to read the output
 
 Bug fixing and functionality
 ----------------------------

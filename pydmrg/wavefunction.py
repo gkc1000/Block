@@ -55,11 +55,11 @@ class Wavefunction(object):
 
         raw_si, raw_left, raw_lleft, raw_lright, \
                 raw_right, raw_rleft, raw_rright = self._raw.load(wfnfile)
-        self.stateInfo.refresh_by(raw_si)
-        left.refresh_by(raw_left)
+        self.stateInfo.refresh_by(raw_si, with_quataMap=True)
+        left.refresh_by(raw_left, with_quataMap=True)
         left.leftStateInfo.refresh_by(raw_lleft)
         left.rightStateInfo.refresh_by(raw_lright)
-        right.refresh_by(raw_right)
+        right.refresh_by(raw_right, with_quataMap=True)
         right.leftStateInfo.refresh_by(raw_rleft)
         right.rightStateInfo.refresh_by(raw_rright)
 

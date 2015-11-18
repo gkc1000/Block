@@ -26,6 +26,7 @@ cdef extern from 'newmat.h':
     cdef cppclass Matrix:
         int Nrows()
         int Ncols()
+        double* data()
         double& element(int, int)
 
 cdef extern from "BaseOperator.h" namespace 'SpinAdapted':
@@ -329,7 +330,7 @@ cdef class RawStateInfo:
         return a[0]
     def get_whole_allowedQuanta(self):
         nrow = self._this.leftStateInfo.quanta.size()
-        ncol = self._this.leftStateInfo.quanta.size()
+        ncol = self._this.rightStateInfo.quanta.size()
         cdef numpy.ndarray tftab = numpy.zeros((nrow,ncol),dtype=numpy.bool8)
         get_whole_StateInfo_allowedQuanta(self._this, <char *>tftab.data)
         return tftab
@@ -522,12 +523,16 @@ cdef class RawRotationMatrix:
         #mat = RawMatrix()
         #mat._this = &self._this.at(qid) # bug: vague return type?
         #mat.update_allprop()
-        cdef Matrix *mati = &(self._this.at(quanta_id))
+# Note: cython 0.22 0.23 create a Pyx_FakeReference object for self._this.at(quanta_id)
+# It overloads the & operator which cause error in & (addressof) operation.
+# Modify _dmrg.cpp file:
+#   __pyx_v_mati = &(__pyx_v_self->_this->at(__pyx_t_1));
+        cdef Matrix *mati = &self._this.at(quanta_id)
         cdef int nrow = mati.Nrows()
         cdef int ncol = mati.Ncols()
         cdef numpy.ndarray mat = numpy.empty((nrow,ncol))
         if nrow*ncol > 0:
-            memcpy(<double *>mat.data, &mati.element(0,0), nrow*ncol*sizeof(int))
+            memcpy(<double *>mat.data, mati.data(), nrow*ncol*sizeof(double))
         return mat
     def get_size(self): return self._this.size()
     def save(self, filerotmat):

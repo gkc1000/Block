@@ -55,7 +55,8 @@ class StateInfo(object):
         #self._sync_self2raw()
         self._raw.save(sifile)
 
-    def refresh_by(self, rawstateinfo, with_left_right=False):
+    def refresh_by(self, rawstateinfo, with_left_right=False,
+                   with_quataMap=False):
         assert(isinstance(rawstateinfo, _dmrg.RawStateInfo))
         self._raw = rawstateinfo
         self._sync_raw2self()
@@ -66,10 +67,12 @@ class StateInfo(object):
             self.rightStateInfo = StateInfo(self._env)
             self.rightStateInfo._raw = self._raw.rightStateInfo
             self.rightStateInfo._sync_raw2self()
-        #FIXME: carefully sync leftStateInfo etc.
-        #self.allowedQuanta = self._raw.get_whole_allowedQuanta()
-        #self.leftUnMapQuanta = self._raw.leftUnMapQuanta
-        #self.rightUnMapQuanta = self._raw.leftUnMapQuanta
+
+        if with_quataMap:
+            #FIXME: be careful with self.leftStateInfo etc.  It might not be initialized?
+            self.allowedQuanta = self._raw.get_whole_allowedQuanta()
+            self.leftUnMapQuanta = self._raw.leftUnMapQuanta
+            self.rightUnMapQuanta = self._raw.leftUnMapQuanta
         # rightStateInfo.leftStateInfo, rightStateInfo.rightStateInfo
 
         #FIXME: how to initialize?

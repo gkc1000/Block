@@ -14,8 +14,7 @@ class KnowValues(unittest.TestCase):
         if not os.path.exists(dmrg_tmpdir):
             os.mkdir(dmrg_tmpdir)
 
-        #with pydmrg.capture_stdout() as stdout:
-        if 1:
+        with pydmrg.capture_stdout() as stdout:
             dmrg_env = pydmrg.DMRGEnv()
             dmrg_env.scratch_prefix = dmrg_tmpdir
             dmrg_env.sym = 'd2h'
@@ -30,7 +29,7 @@ class KnowValues(unittest.TestCase):
             dmrg_env.update_dmrginp('FCIDUMP-1')
             e = pydmrg.dmrg_single(dmrg_env)
 
-        shutil.rmtree(dmrg_tmpdir)
+        #shutil.rmtree(dmrg_tmpdir)
 
         self.assertAlmostEqual(e, -17.10516373008, 10)
 

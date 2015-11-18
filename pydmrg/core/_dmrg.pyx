@@ -98,7 +98,7 @@ cdef extern from 'spinblock.h' namespace 'SpinAdapted':
     cdef cppclass SpinBlock:
         SpinBlock()
         SpinBlock(int start, int finish, bool implicitTranspose, bool is_complement)
-        SpinBlock(StateInfo& s)
+        SpinBlock(StateInfo& s, int integralIndex)
         SpinBlock* leftBlock
         SpinBlock* rightBlock
         StateInfo braStateInfo
@@ -229,7 +229,6 @@ cdef extern from "input.h" namespace "SpinAdapted":
         vector[int] m_spatial_to_spin
         vector[int] m_spin_to_spatial
         int m_outputlevel
-        double m_core_energy
         orbitalFormat m_orbformat
         int m_reorderType
         string m_reorderfile
@@ -268,7 +267,7 @@ cdef extern from 'itrf.h':
     #void set_SpinBlock_for_BuildSumBlock(SpinBlock *self, SpinBlock *lblock,
     #                                     SpinBlock *rblock, vector[int]& sites,
     #                                     StateInfo *si)
-    void set_SpinBlock_twoInt(SpinBlock *self)
+    void set_SpinBlock_twoInt(SpinBlock *self, int integralIndex)
 
     int save_stateinfo(char *filesi, StateInfo *si)
     int load_stateinfo(char *filesi, StateInfo *si)
@@ -407,9 +406,9 @@ cdef class NewRawSpinBlock(RawSpinBlock):
         del self._this
         # FIXME: SpinBlock(start,finish) calls dmrginp
         self._this = new SpinBlock(start, finish, implicitTranspose, is_complement)
-    def init_by_stateinfo(self, RawStateInfo si):
+    def init_by_stateinfo(self, RawStateInfo si, int integralIndex):
         del self._this
-        self._this = new SpinBlock(si._this[0])
+        self._this = new SpinBlock(si._this[0], integralIndex)
     def BuildTensorProductBlock(self, sites):
         self._this.BuildTensorProductBlock(sites)
     def default_op_components(self, direct,
@@ -433,8 +432,8 @@ cdef class NewRawSpinBlock(RawSpinBlock):
         #for i in c_sites:
         #    self._this.complementary_sites.push_back(i)
         self._this.complementary_sites = c_sites
-    def set_twoInt(self):
-        set_SpinBlock_twoInt(self._this)
+    def set_twoInt(self, integralIndex=0):
+        set_SpinBlock_twoInt(self._this, integralIndex)
     def build_ops(self): # TODO add csf for overloaded build_operators
         self._this.build_iterators()
         self._this.build_operators()
@@ -679,7 +678,6 @@ def Pysync2dmrginp(dmrgenv):
     dmrginp.m_spatial_to_spin = dmrgenv.spatial_to_spin
     dmrginp.m_spin_to_spatial = dmrgenv.spin_to_spatial
     dmrginp.m_outputlevel = dmrgenv.outputlevel
-    dmrginp.m_core_energy = dmrgenv.core_energy
     dmrginp.m_orbformat   = dmrgenv.orbformat
     dmrginp.m_reorderType = dmrgenv.reorderType
     dmrginp.m_reorderfile = dmrgenv.reorderfile
@@ -739,7 +737,6 @@ def Pysync_from_dmrginp(dmrgenv):
     dmrgenv.spatial_to_spin = dmrginp.m_spatial_to_spin
     dmrgenv.spin_to_spatial = dmrginp.m_spin_to_spatial
     dmrgenv.outputlevel = dmrginp.m_outputlevel
-    dmrgenv.core_energy = dmrginp.m_core_energy
     dmrgenv.orbformat = dmrginp.m_orbformat
     dmrgenv.reorderType = dmrginp.m_reorderType
     dmrgenv.reorder = dmrginp.m_reorder

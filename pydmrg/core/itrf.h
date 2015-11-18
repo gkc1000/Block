@@ -34,7 +34,7 @@ void BuildSlaterBlock_with_stateinfo(SpinBlock& self, StateInfo& si,
 //void set_SpinBlock_for_BuildSumBlock(SpinBlock *self, SpinBlock *lblock,
 //                                     SpinBlock *rblock, std::vector<int>& sites,
 //                                     StateInfo *si);
-void set_SpinBlock_twoInt(SpinBlock *self);
+void set_SpinBlock_twoInt(SpinBlock *self, int integralIndex);
 
 int save_stateinfo(char *filesi, StateInfo *si);
 int load_stateinfo(char *filesi, StateInfo *si);

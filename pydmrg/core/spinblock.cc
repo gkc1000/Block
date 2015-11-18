@@ -121,8 +121,8 @@ void BuildSlaterBlock_with_stateinfo(SpinBlock& self, StateInfo& si,
  * call me before calling those functions or the functions contained in
  * them, such as build_operators, build_iterators
  */
-void set_SpinBlock_twoInt(SpinBlock *self)
+void set_SpinBlock_twoInt(SpinBlock *self, int integralIndex)
 {
     //TODO: if (dmrginp.use_partial_two_integrals())
-    self->twoInt = boost::shared_ptr<TwoElectronArray>(&v_2,  boostutils::null_deleter());
+    self->twoInt = boost::shared_ptr<TwoElectronArray>(&v_2[integralIndex],  boostutils::null_deleter());
 }

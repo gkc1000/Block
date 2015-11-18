@@ -45,7 +45,7 @@ set(Boost_USE_STATIC_LIBS off)
 set(Boost_USE_MULTITHREADED off)
 #target_link_libraries(${Boost_LIBRARY_DIRS})
 set(Boost_COMPONENTS serialization filesystem system)
-find_package(Boost 1.47.0 COMPONENTS ${Boost_COMPONENTS})
+find_package(Boost 1.55.0 COMPONENTS ${Boost_COMPONENTS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 configure_file(

@@ -35,11 +35,11 @@ class Wavefunction(object):
     def load(self, start_id, end_id, root_id=0, prefix=None):
         if prefix is None:
             if self._env is None:
-                prefix = os.environ['TMPDIR'] + '/'
+                prefix = os.environ['TMPDIR']
             else:
-                prefix = self._env.scratch_prefix + '/'
-        wfnfile = '%swave-%d-%d.0.%d.tmp' \
-                % (prefix, start_id, end_id, root_id)
+                prefix = self._env.scratch_prefix
+        wfnfile = os.path.join(prefix,
+                               'wave-%d-%d.0.%d.tmp' % (start_id, end_id, root_id))
         if not os.path.isfile(wfnfile):
             raise OSError('file %s does not exist' % wfnfile)
         self._raw = _dmrg.NewRawWavefunction()

@@ -97,7 +97,7 @@ cdef extern from 'spinblock.h' namespace 'SpinAdapted':
     # name??
     cdef cppclass SpinBlock:
         SpinBlock()
-        SpinBlock(int start, int finish, bool implicitTranspose, bool is_complement)
+        SpinBlock(int start, int finish, int integralIndex, bool implicitTranspose, bool is_complement)
         SpinBlock(StateInfo& s, int integralIndex)
         SpinBlock* leftBlock
         SpinBlock* rightBlock
@@ -402,10 +402,11 @@ cdef class NewRawSpinBlock(RawSpinBlock):
         ket._this = &self._this.ketStateInfo
         load_spinblock(filespinblock, self._this)
         return bra, ket
-    def init_by_dot_id(self, int start, int finish, implicitTranspose, is_complement=0):
+    def init_by_dot_id(self, int start, int finish, integralIndex=0,
+                       implicitTranspose=True, is_complement=0):
         del self._this
         # FIXME: SpinBlock(start,finish) calls dmrginp
-        self._this = new SpinBlock(start, finish, implicitTranspose, is_complement)
+        self._this = new SpinBlock(start, finish, integralIndex, implicitTranspose, is_complement)
     def init_by_stateinfo(self, RawStateInfo si, int integralIndex):
         del self._this
         self._this = new SpinBlock(si._this[0], integralIndex)

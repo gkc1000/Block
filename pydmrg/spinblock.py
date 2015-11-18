@@ -99,7 +99,9 @@ class SpinBlock(object):
         else:
             end_id = start_id - (dot_size-1)
             self.sites = range(end_id, start_id+1)
-        self._raw.init_by_dot_id(start_id, end_id, implicitTranspose, is_complement)
+        integral_file_id = 0
+        self._raw.init_by_dot_id(start_id, end_id, integral_file_id,
+                                 implicitTranspose, is_complement)
         self.braStateInfo.refresh_by(self._raw.get_braStateInfo())
         self.ketStateInfo.refresh_by(self._raw.get_ketStateInfo())
 

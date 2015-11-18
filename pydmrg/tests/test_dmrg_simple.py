@@ -14,7 +14,8 @@ class KnowValues(unittest.TestCase):
         if not os.path.exists(dmrg_tmpdir):
             os.mkdir(dmrg_tmpdir)
 
-        with pydmrg.capture_stdout() as stdout:
+        #with pydmrg.capture_stdout() as stdout:
+        if 1:
             dmrg_env = pydmrg.DMRGEnv()
             dmrg_env.scratch_prefix = dmrg_tmpdir
             dmrg_env.sym = 'd2h'

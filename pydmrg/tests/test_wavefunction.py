@@ -6,7 +6,7 @@ import numpy
 import pydmrg
 
 
-dmrg_tmpdir = 'dmrg_tmp/'
+dmrg_tmpdir = 'dmrg_tmp'
 if not os.path.exists(dmrg_tmpdir):
     os.mkdir(dmrg_tmpdir)
 
@@ -30,7 +30,7 @@ with pydmrg.capture_stdout() as stdout:
 class KnowValues(unittest.TestCase):
     def test_load(self):
         wfn = pydmrg.Wavefunction()
-        wfn.load(5, 7, 0, prefix=dmrg_tmpdir)
+        wfn.load(5, 7, 0, prefix=os.path.join(dmrg_tmpdir, 'node0'))
         self.assertEqual(wfn.deltaQuantum.particleNumber, 4)
         self.assertEqual(wfn.deltaQuantum.totalSpin, 0)
         self.assertEqual(wfn.stateInfo.totalStates, 3)

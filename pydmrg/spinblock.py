@@ -106,7 +106,8 @@ class SpinBlock(object):
         self.ketStateInfo.refresh_by(self._raw.get_ketStateInfo())
 
     def init_by_stateinfo(self, si):
-        self._raw.init_by_stateinfo(si._raw)
+        integral_file_id = 0
+        self._raw.init_by_stateinfo(si._raw, integral_file_id)
         self.braStateInfo = si
         self.ketStateInfo = si
         self._sync_raw2self()
@@ -204,9 +205,10 @@ def InitStartingBlock(dmrg_env, forward=True):
         # dmrg_env.add_noninteracting_orbs is always True
         if dmrg_env.add_noninteracting_orbs and molecule_quantum_tot_spin != 0:
             s = quanta.SpinQuantum()
-            s.init(nparticle, spin, irrep_id) # fixme, nparticle =?= spin, see initblocks.C
+            irrep_id = 0
+            s.init(dmrgenv.nelec, molecule_quantum_tot_spin, irrep_id)
             addstate = stateinfo.StateInfo(dmrg_env)
-            addstate.init_by_a_spinquantum(s)
+            addstate._raw.init_by_a_spinquantum(s._raw)
             dummyblock = SpinBlock(dmrg_env)
             dummyblock.init_by_stateinfo(addstate)
             newblk = SpinBlock(dmrg_env)
